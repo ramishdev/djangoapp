@@ -1,23 +1,30 @@
-from .models import Item,User
-from .serializers import ItemSerializer,UserSerializer
-from django.http import Http404
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from django.shortcuts import render
 from rest_framework import status
-from rest_framework import generics
-from rest_framework.reverse import reverse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
+from .models import Item
+from .serializers import ItemSerializer,UserSerializer
+from rest_framework import generics
+from django.contrib.auth.models import User
+from .permissions import IsOwnerOrReadOnly
+from rest_framework import permissions
 from rest_framework import viewsets
 
 
-class ItemListViews(viewsets.ModelViewSet):
-    queryset = Item.objects.all()
-    serializer_class = ItemSerializer
-
-class UserListViews(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+class ItemViewSet(viewsets.ModelViewSet):
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
 
 
 '''

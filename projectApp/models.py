@@ -4,11 +4,10 @@ from django.db import models
 
 class Item(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100,blank=True,default='')
+    title = models.CharField(max_length=100, blank=True, default='')
     text = models.TextField()
+    owner = models.ForeignKey('auth.User', related_name='items', on_delete=models.CASCADE)
 
 
-class User(models.Model):
-    created = models.DateTimeField(auto_now_add=True)
-    Name = models.CharField(max_length=100,blank=True,default='')
-    text = models.TextField()
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)

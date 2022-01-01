@@ -5,8 +5,8 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 
 router = DefaultRouter()
-router.register(r'Item', views.ItemListViews)
-router.register(r'User', views.UserListViews)
+router.register(r'Item', views.ItemViewSet)
+router.register(r'User', views.UserViewSet)
 
 #router.include_format_suffixes = False
 

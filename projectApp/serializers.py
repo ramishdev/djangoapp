@@ -1,13 +1,18 @@
 from rest_framework import serializers
-from .models import Item,User
+from .models import Item
+from django.contrib.auth.models import User
 
-class ItemSerializer(serializers.ModelSerializer):
+
+class ItemSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Item
-        fields = ['created','title','text']
+        fields = ['url','created','title','text','owner']
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+
+    items = serializers.HyperlinkedRelatedField(many=True,view_name='item-detail',read_only=True)
     class Meta:
         model = User
-        fields = ['created','Name','text']
+        fields = ['url','id','username','items']
