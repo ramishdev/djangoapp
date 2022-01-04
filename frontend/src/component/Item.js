@@ -1,8 +1,8 @@
 import {useState, useEffect} from "react"
+import React from 'react';
 import axios from "axios"
-import  List from "./List"
 
-function Note() {
+function Item() {
     const [notes , setNewNotes] = useState(null)
     useEffect(() => {
         getNotes()
@@ -11,7 +11,7 @@ function Note() {
     function getNotes() {
     axios({
         method: "GET",
-        url:"/",
+        url:"/Item",
         }).then((response)=>{
         const data = response.data
         console.log(data);
@@ -25,8 +25,10 @@ function Note() {
     })}
 
     return (
-        JSON.stringify(notes)
-     );
+        <div className="">
+            {JSON.stringify(notes)}
+        </div>
+    );
 }
 
-export default Note;
+export default Item;
